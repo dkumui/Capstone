@@ -28,10 +28,14 @@ function computeStockStatus(stockQty: number | null | undefined): Exclude<Invent
 }
 
 function mapRowToProduct(row: any): ProductTableRow {
+	const fallbackName =
+		row.name ??
+		`${row.cap_type === 'cap_1_warna' ? 'Cap 1 Warna' : 'Cap 2 Warna'} ${row.color_variant ?? ''}`.trim();
+
 	return {
 		id: row.id,
 		product_code: row.product_code,
-		name: row.name,
+		name: fallbackName,
 		product_type: row.product_type,
 		cap_type: row.cap_type,
 		color_variant: row.color_variant,
@@ -64,7 +68,7 @@ export async function getPublicProducts(): Promise<ProductTableRow[]> {
 
   const { data } = await supabase
     .from('products')
-    .select('id, product_code, product_type, cap_type, color_variant, size_length_cm, size_width_cm, size_note, price, stock_qty, image_url, description, is_featured, is_active, source, created_at, updated_at')
+    .select('id, product_code, name, product_type, cap_type, color_variant, size_length_cm, size_width_cm, size_note, price, stock_qty, image_url, description, is_featured, is_active, source, created_at, updated_at')
     .eq('is_active', true)
     .order('created_at', { ascending: false });
 
@@ -121,9 +125,7 @@ export async function getAdminProducts(): Promise<ProductTableRow[]> {
 
 	const { data, error } = await supabase
 		.from('products')
-		.select(
-			'id, product_code, product_type, cap_type, color_variant, size_length_cm, size_width_cm, size_note, price, stock_qty, image_url, description, is_featured, is_active, source, created_at, updated_at'
-		)
+		.select('id, product_code, name, product_type, cap_type, color_variant, size_length_cm, size_width_cm, size_note, price, stock_qty, image_url, description, is_featured, is_active, source, created_at, updated_at')
 		.order('created_at', { ascending: false });
 
 	if (error || !data) {

@@ -36,21 +36,26 @@
 	]);
 
 	$effect(() => {
-		if (!selectedProduct) return;
-		if (selectedProductRequestId === 0) return;
-		if (selectedProductRequestId === lastHandledProductRequestId) return;
+        if (!selectedProduct) return;
+        if (selectedProductRequestId === 0) return;
+        if (selectedProductRequestId === lastHandledProductRequestId) return;
 
-		lastHandledProductRequestId = selectedProductRequestId;
-		open = true;
+        if (!selectedProduct.product_code || !selectedProduct.name || !selectedProduct.color_variant) {
+            console.error('Invalid selectedProduct for chatbot:', selectedProduct);
+            return;
+        }
 
-		messages = [
-			...messages,
-			{
-				sender: 'assistant',
-				text: `Anda sedang melihat ${selectedProduct.name} (${selectedProduct.product_code}) warna ${selectedProduct.color_variant}. Silakan tanyakan harga, ukuran, atau stok produk ini.`
-			}
-		];
-	});
+        lastHandledProductRequestId = selectedProductRequestId;
+        open = true;
+
+        messages = [
+            ...messages,
+            {
+                sender: 'assistant',
+                text: `Anda sedang melihat ${selectedProduct.name} (${selectedProduct.product_code}) warna ${selectedProduct.color_variant}. Silakan tanyakan harga, ukuran, atau stok produk ini.`
+            }
+        ];
+    });
 
 	function normalizeWhatsapp(value: string): string {
 		const digits = value.replace(/\D/g, '');

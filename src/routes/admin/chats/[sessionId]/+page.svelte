@@ -3,7 +3,7 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	const session = data.session as NonNullable<PageData['session']>;
+	const session = $derived(data.session as NonNullable<PageData['session']>);
 
 	function formatDate(value: string | null | undefined): string {
 		if (!value) return '-';

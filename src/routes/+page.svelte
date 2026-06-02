@@ -34,14 +34,25 @@
 	let selectedProductRequestId = $state(0);
 
 	function handleAskProduct(product: ProductTableRow) {
-		selectedProductForChat = {
-			name: product.name,
-			product_code: product.product_code,
-			color_variant: product.color_variant
-		};
+        console.log('Produk masuk ke halaman utama:', product);
 
-		selectedProductRequestId += 1;
-	}
+        if (!product?.product_code || !product?.color_variant) {
+            console.error('Produk tidak valid untuk chatbot:', product);
+            return;
+        }
+
+        const productName =
+            product.name ||
+            `${product.cap_type === 'cap_1_warna' ? 'Cap 1 Warna' : 'Cap 2 Warna'} ${product.color_variant}`;
+
+        selectedProductForChat = {
+            name: productName,
+            product_code: product.product_code,
+            color_variant: product.color_variant
+        };
+
+        selectedProductRequestId += 1;
+    }
 </script>
 
 <svelte:head>
