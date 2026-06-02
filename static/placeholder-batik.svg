@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600" fill="none">
+  <rect width="800" height="600" fill="#EFE4D2" />
+  <rect x="40" y="40" width="720" height="520" rx="18" fill="#F8F1E7" stroke="#9F7A5A" stroke-width="4"/>
+  <g opacity="0.35" stroke="#6A2A2A" stroke-width="2">
+    <path d="M120 150C170 100 230 100 280 150C330 200 390 200 440 150C490 100 550 100 600 150"/>
+    <path d="M120 250C170 200 230 200 280 250C330 300 390 300 440 250C490 200 550 200 600 250"/>
+    <path d="M120 350C170 300 230 300 280 350C330 400 390 400 440 350C490 300 550 300 600 350"/>
+    <path d="M120 450C170 400 230 400 280 450C330 500 390 500 440 450C490 400 550 400 600 450"/>
+  </g>
+  <text x="400" y="530" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="24" fill="#4A3425">Batik HM Akmal</text>
+</svg>

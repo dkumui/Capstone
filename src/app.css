@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+:root {
+  --color-ivory: #f8f1e7;
+  --color-cream: #efe4d2;
+  --color-earth: #9f7a5a;
+  --color-maroon: #6a2a2a;
+  --color-brown: #4a3425;
+  --color-ink: #1f1611;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: var(--color-ink);
+  background:
+    radial-gradient(circle at 10% 20%, #fff7ee 0%, transparent 35%),
+    radial-gradient(circle at 90% 10%, #f5e8d6 0%, transparent 30%),
+    linear-gradient(180deg, var(--color-ivory) 0%, #f6ecde 100%);
+}
+
+.card-shadow {
+  box-shadow: 0 10px 30px rgba(74, 52, 37, 0.12);
+}
+
+.batik-pattern {
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(106, 42, 42, 0.08) 1px, transparent 0);
+  background-size: 16px 16px;
+}
+
+.btn-primary {
+  @apply inline-flex items-center justify-center rounded-lg bg-[var(--color-maroon)] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#7d3333] disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center rounded-lg border border-[var(--color-earth)] bg-white px-4 py-2 text-sm font-semibold text-[var(--color-brown)] transition hover:bg-[var(--color-cream)];
+}
+
+.section-shell {
+  @apply mx-auto w-full max-w-6xl px-4 md:px-6;
+}
