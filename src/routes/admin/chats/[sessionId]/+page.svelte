@@ -39,12 +39,12 @@
 	<title>Detail Chat | Admin Batik HM Akmal</title>
 </svelte:head>
 
-<div class="min-h-screen bg-[#f8f1e7] px-4 py-6">
-	<div class="mx-auto max-w-5xl space-y-6">
+<div class="space-y-6">
+	<div>
 		<div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
 			<div>
-				<a class="text-sm font-semibold text-[var(--color-maroon)]" href="/admin#chat">
-					← Kembali ke Dashboard
+				<a class="text-sm font-semibold text-[var(--color-maroon)]" href="/admin/chats">
+					← Kembali ke Riwayat Chat
 				</a>
 
 				<h1 class="mt-2 text-3xl font-bold text-[var(--color-brown)]">Detail Chat</h1>
@@ -155,10 +155,10 @@
 					{#each data.messages as message}
 						<div
 							class={message.sender === 'user'
-								? 'mr-10 rounded-xl bg-[#f8efe3] p-3'
+								? 'mr-10 rounded-xl border border-[#eadac7] bg-[#fffaf3] p-3 text-[#4a3425]'
 								: message.sender === 'assistant'
-									? 'ml-10 rounded-xl bg-[#6a2a2a] p-3 text-white'
-									: 'ml-10 rounded-xl border border-[#d8c3aa] bg-white p-3'}
+									? 'ml-10 rounded-xl bg-[var(--color-indigo)] p-3 text-white'
+									: 'ml-10 rounded-xl border border-[#d8c3aa] bg-white p-3 text-[#4a3425]'}
 						>
 							<div class="flex items-center justify-between gap-3">
 								<p class="text-xs font-semibold uppercase tracking-wide">
