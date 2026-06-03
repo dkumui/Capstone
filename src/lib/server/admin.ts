@@ -1,11 +1,23 @@
 import { redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/private';
+import { timingSafeEqual } from 'crypto';
 import type { Cookies } from '@sveltejs/kit';
+
+function safeEqual(a: string, b: string): boolean {
+	try {
+		const bufA = Buffer.from(a);
+		const bufB = Buffer.from(b);
+		if (bufA.length !== bufB.length) return false;
+		return timingSafeEqual(bufA, bufB);
+	} catch {
+		return false;
+	}
+}
 
 export function requireAdmin(cookies: Cookies) {
 	const session = cookies.get('admin_session');
 
-	if (!env.ADMIN_SESSION_TOKEN || session !== env.ADMIN_SESSION_TOKEN) {
+	if (!env.ADMIN_SESSION_TOKEN || !session || !safeEqual(session, env.ADMIN_SESSION_TOKEN)) {
 		throw redirect(303, '/admin/login');
 	}
 }

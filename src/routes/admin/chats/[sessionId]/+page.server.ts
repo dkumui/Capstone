@@ -1,23 +1,11 @@
 import { fail, redirect } from '@sveltejs/kit';
-import { env } from '$env/dynamic/private';
+import { requireAdmin, getString } from '$lib/server/admin';
 import {
 	getAdminChatThread,
 	insertAdminChatReply,
 	updateChatSessionStatus,
 	type ChatSessionStatus
 } from '$lib/services/chatbot/persistence';
-
-function requireAdmin(cookies: import('@sveltejs/kit').Cookies) {
-	const session = cookies.get('admin_session');
-
-	if (!env.ADMIN_SESSION_TOKEN || session !== env.ADMIN_SESSION_TOKEN) {
-		throw redirect(303, '/admin/login');
-	}
-}
-
-function getString(formData: FormData, key: string): string {
-	return String(formData.get(key) ?? '').trim();
-}
 
 function parseStatus(value: string): ChatSessionStatus | null {
 	if (value === 'open' || value === 'pending' || value === 'closed') {
