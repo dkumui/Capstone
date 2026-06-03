@@ -21,56 +21,82 @@
 		return 'Cek Stok';
 	}
 
+	function stockBadgeClass(stock: ProductTableRow['stock_status']): string {
+		if (stock === 'ready') return 'bg-green-50 text-green-800 border-green-200';
+		if (stock === 'limited') return 'bg-amber-50 text-amber-800 border-amber-200';
+		if (stock === 'sold_out') return 'bg-red-50 text-red-800 border-red-200';
+		return 'bg-stone-50 text-stone-700 border-stone-200';
+	}
+
 	function productImage(src: string | null | undefined): string {
 		return src && src.trim() !== '' ? src : '/placeholder-batik.svg';
 	}
 
 	function handleAskClick() {
-        console.log('Tanya Produk diklik:', product);
+		if (!product?.product_code || !product?.color_variant) {
+			console.error('Produk tidak valid untuk chatbot:', product);
+			return;
+		}
 
-        if (!product?.product_code || !product?.color_variant) {
-            console.error('Produk tidak valid untuk chatbot:', product);
-            return;
-        }
-
-        onAskProduct({
-            ...product,
-            name:
-                product.name ||
-                `${product.cap_type === 'cap_1_warna' ? 'Cap 1 Warna' : 'Cap 2 Warna'} ${product.color_variant}`
-        });
-    }
+		onAskProduct({
+			...product,
+			name:
+				product.name ||
+				`${product.cap_type === 'cap_1_warna' ? 'Cap 1 Warna' : 'Cap 2 Warna'} ${product.color_variant}`
+		});
+	}
 </script>
 
-<article class="card-shadow overflow-hidden rounded-xl border border-[#e4d3bf] bg-white">
-	<img
-		src={productImage(product.image_url)}
-		alt={product.name}
-		class="h-52 w-full object-cover"
-		loading="lazy"
-	/>
+<article class="group overflow-hidden rounded-[1.5rem] border border-[#ead8bc] bg-white soft-shadow transition duration-300 hover:-translate-y-1 hover:shadow-xl">
+	<div class="relative overflow-hidden bg-[#f6ead7]">
+		<img
+			src={productImage(product.image_url)}
+			alt={product.name}
+			class="h-64 w-full object-cover transition duration-500 group-hover:scale-105"
+			loading="lazy"
+		/>
 
-	<div class="space-y-2 p-4">
-		<h3 class="text-lg font-semibold text-[var(--color-brown)]">{product.name}</h3>
+		<div class="absolute left-4 top-4 rounded-full border border-white/60 bg-white/90 px-3 py-1 text-xs font-black text-[var(--color-indigo)] backdrop-blur">
+			{capLabel(product.cap_type)}
+		</div>
 
-		<p class="text-xs uppercase tracking-wide text-[var(--color-earth)]">
-			{capLabel(product.cap_type)} • {product.color_variant}
+		<div class={`absolute right-4 top-4 rounded-full border px-3 py-1 text-xs font-black backdrop-blur ${stockBadgeClass(product.stock_status)}`}>
+			{stockLabel(product.stock_status)}
+		</div>
+	</div>
+
+	<div class="p-5">
+		<p class="font-mono text-xs font-semibold uppercase tracking-wide text-[#9b8066]">
+			{product.product_code}
 		</p>
 
-		<p class="text-sm text-[#644f3f]">
-			Ukuran: {product.size_note ?? `±${product.size_length_cm} x ${product.size_width_cm} cm`}
-		</p>
+		<h3 class="mt-2 line-clamp-2 text-xl font-black leading-tight text-[var(--color-brown)]">
+			{product.name}
+		</h3>
 
-		<p class="text-sm font-bold text-[var(--color-maroon)]">
-			{formatRupiah(product.price)}
-		</p>
+		<div class="mt-4 grid grid-cols-2 gap-3 text-sm">
+			<div class="rounded-2xl bg-[#fff7e8] p-3">
+				<p class="text-xs font-semibold text-[#8a715c]">Warna</p>
+				<p class="mt-1 font-bold text-[var(--color-indigo)]">{product.color_variant}</p>
+			</div>
 
-		<div class="flex items-center justify-between gap-3 pt-2">
-			<span class="rounded-full bg-[#f4eadf] px-3 py-1 text-xs font-semibold text-[#654b37]">
-				{stockLabel(product.stock_status)}
-			</span>
+			<div class="rounded-2xl bg-[#fff7e8] p-3">
+				<p class="text-xs font-semibold text-[#8a715c]">Ukuran</p>
+				<p class="mt-1 font-bold text-[var(--color-indigo)]">
+					{product.size_length_cm} x {product.size_width_cm} cm
+				</p>
+			</div>
+		</div>
 
-			<button class="btn-secondary" type="button" onclick={handleAskClick}>
+		<div class="mt-5 flex items-end justify-between gap-3">
+			<div>
+				<p class="text-xs font-semibold text-[#8a715c]">Harga</p>
+				<p class="text-2xl font-black text-[var(--color-maroon)]">
+					{formatRupiah(product.price)}
+				</p>
+			</div>
+
+			<button class="btn-primary px-4 py-2.5" type="button" onclick={handleAskClick}>
 				Tanya Produk
 			</button>
 		</div>

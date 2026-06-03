@@ -31,31 +31,31 @@
 	let messages = $state<Message[]>([
 		{
 			sender: 'assistant',
-			text: 'Halo! Saya asisten Batik HM Akmal. Saya bisa bantu info produk, warna, harga, ukuran, stok, pemesanan, pengiriman, dan lokasi toko.'
+			text: 'Halo, saya asisten Batik HM Akmal. Saya bisa membantu cek produk, warna, harga, ukuran, stok, pemesanan, dan lokasi toko.'
 		}
 	]);
 
 	$effect(() => {
-        if (!selectedProduct) return;
-        if (selectedProductRequestId === 0) return;
-        if (selectedProductRequestId === lastHandledProductRequestId) return;
+		if (!selectedProduct) return;
+		if (selectedProductRequestId === 0) return;
+		if (selectedProductRequestId === lastHandledProductRequestId) return;
 
-        if (!selectedProduct.product_code || !selectedProduct.name || !selectedProduct.color_variant) {
-            console.error('Invalid selectedProduct for chatbot:', selectedProduct);
-            return;
-        }
+		if (!selectedProduct.product_code || !selectedProduct.name || !selectedProduct.color_variant) {
+			console.error('Invalid selectedProduct for chatbot:', selectedProduct);
+			return;
+		}
 
-        lastHandledProductRequestId = selectedProductRequestId;
-        open = true;
+		lastHandledProductRequestId = selectedProductRequestId;
+		open = true;
 
-        messages = [
-            ...messages,
-            {
-                sender: 'assistant',
-                text: `Anda sedang melihat ${selectedProduct.name} (${selectedProduct.product_code}) warna ${selectedProduct.color_variant}. Silakan tanyakan harga, ukuran, atau stok produk ini.`
-            }
-        ];
-    });
+		messages = [
+			...messages,
+			{
+				sender: 'assistant',
+				text: `Anda sedang melihat ${selectedProduct.name} (${selectedProduct.product_code}) warna ${selectedProduct.color_variant}. Silakan tanyakan harga, ukuran, atau stok produk ini.`
+			}
+		];
+	});
 
 	function normalizeWhatsapp(value: string): string {
 		const digits = value.replace(/\D/g, '');
@@ -116,10 +116,7 @@
 			if (!res.ok) {
 				messages = [
 					...messages,
-					{
-						sender: 'assistant',
-						text: 'Terjadi kendala koneksi. Coba ulang sebentar lagi.'
-					}
+					{ sender: 'assistant', text: 'Terjadi kendala koneksi. Coba ulang sebentar lagi.' }
 				];
 				return;
 			}
@@ -136,10 +133,7 @@
 		} catch {
 			messages = [
 				...messages,
-				{
-					sender: 'assistant',
-					text: 'Terjadi kendala koneksi. Coba ulang sebentar lagi.'
-				}
+				{ sender: 'assistant', text: 'Terjadi kendala koneksi. Coba ulang sebentar lagi.' }
 			];
 		} finally {
 			loading = false;
@@ -156,73 +150,81 @@
 
 <div class="fixed bottom-4 right-4 z-50">
 	{#if open}
-		<div class="mb-3 w-[min(92vw,380px)] rounded-2xl border border-[#dcc8ae] bg-white shadow-2xl">
-			<div class="flex items-center justify-between rounded-t-2xl bg-[var(--color-maroon)] px-4 py-3 text-white">
-				<p class="text-sm font-semibold">Chat Batik HM Akmal</p>
-				<button class="text-xs font-semibold" type="button" onclick={closeChat}>Tutup</button>
+		<div class="mb-3 w-[min(94vw,410px)] overflow-hidden rounded-[1.5rem] border border-[#ead8bc] bg-white shadow-2xl">
+			<div class="bg-[var(--color-indigo)] px-4 py-4 text-white">
+				<div class="flex items-center justify-between gap-3">
+					<div>
+						<p class="text-sm font-black">Chat Batik HM Akmal</p>
+						<p class="mt-0.5 text-xs text-white/70">Tanya produk, stok, harga, dan pemesanan</p>
+					</div>
+
+					<button class="rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold transition hover:bg-white/20" type="button" onclick={closeChat}>
+						Tutup
+					</button>
+				</div>
 			</div>
 
 			<div class="border-b border-[#eadfce] bg-[#fffaf3] p-3">
-				<p class="text-xs font-semibold text-[#6a5340]">Data pelanggan opsional</p>
+				<p class="text-xs font-bold uppercase tracking-wide text-[#8a715c]">Data pelanggan opsional</p>
 
 				<div class="mt-2 grid gap-2 sm:grid-cols-2">
 					<input
-						class="rounded-lg border border-[#d9c6af] px-3 py-2 text-xs"
+						class="rounded-full border border-[#d9c6af] bg-white px-3 py-2 text-xs outline-none focus:border-[var(--color-gold)] focus:ring-4 focus:ring-[#c89235]/15"
 						bind:value={customerName}
 						placeholder="Nama"
 					/>
 
 					<input
-						class="rounded-lg border border-[#d9c6af] px-3 py-2 text-xs"
+						class="rounded-full border border-[#d9c6af] bg-white px-3 py-2 text-xs outline-none focus:border-[var(--color-gold)] focus:ring-4 focus:ring-[#c89235]/15"
 						bind:value={customerWhatsapp}
 						placeholder="No. WhatsApp"
 					/>
 				</div>
 			</div>
 
-			<div class="max-h-80 space-y-2 overflow-y-auto p-3">
+			<div class="max-h-80 space-y-2 overflow-y-auto bg-[#fffaf3] p-3">
 				{#each messages as msg}
 					<div
 						class={msg.sender === 'assistant'
-							? 'mr-6 rounded-lg bg-[#f8efe3] px-3 py-2 text-sm text-[#4a3425]'
-							: 'ml-6 rounded-lg bg-[#6a2a2a] px-3 py-2 text-sm text-white'}
+							? 'mr-7 rounded-2xl rounded-tl-sm border border-[#ead8bc] bg-white px-3 py-2.5 text-sm leading-6 text-[#4a3425]'
+							: 'ml-7 rounded-2xl rounded-tr-sm bg-[var(--color-indigo)] px-3 py-2.5 text-sm leading-6 text-white'}
 					>
 						{msg.text}
 					</div>
 				{/each}
 
 				{#if loading}
-					<p class="text-xs text-[#7d6650]">Asisten sedang mengetik...</p>
+					<p class="text-xs font-semibold text-[#7d6650]">Asisten sedang mengetik...</p>
 				{/if}
 			</div>
 
-			<div class="border-t border-[#eadfce] p-3">
+			<div class="border-t border-[#eadfce] bg-white p-3">
 				<div class="flex gap-2">
 					<input
-						class="flex-1 rounded-lg border border-[#d9c6af] px-3 py-2 text-sm"
+						class="min-w-0 flex-1 rounded-full border border-[#d9c6af] px-4 py-3 text-sm outline-none focus:border-[var(--color-gold)] focus:ring-4 focus:ring-[#c89235]/15"
 						bind:value={input}
 						placeholder="Tulis pertanyaan..."
 						onkeydown={handleKeydown}
 					/>
 
-					<button class="btn-primary" type="button" onclick={sendMessage} disabled={loading}>
+					<button class="btn-primary px-4" type="button" onclick={sendMessage} disabled={loading}>
 						Kirim
 					</button>
 				</div>
 
 				<a
-					class="mt-2 inline-flex w-full justify-center rounded-lg border border-[#d9c6af] bg-white px-3 py-2 text-xs font-semibold text-[var(--color-maroon)]"
+					class="mt-2 inline-flex w-full justify-center rounded-full border border-[#ead8bc] bg-[#fff7e8] px-3 py-2.5 text-xs font-black text-[var(--color-indigo)] transition hover:bg-white"
 					href={getWhatsappHref()}
 					target="_blank"
 					rel="noreferrer"
 				>
-					Lanjut ke WhatsApp
+					Lanjut ke WhatsApp Admin
 				</a>
 			</div>
 		</div>
 	{/if}
 
-	<button class="btn-primary rounded-full px-5 py-3" type="button" onclick={() => (open = !open)}>
-		{open ? 'Tutup Chat' : 'Chat Kami'}
+	<button class="rounded-full bg-[var(--color-indigo)] px-5 py-3 text-sm font-black text-white shadow-xl shadow-[#183153]/25 transition hover:-translate-y-0.5 hover:bg-[#213f67]" type="button" onclick={() => (open = !open)}>
+		{open ? 'Tutup Chat' : 'Chat Produk'}
 	</button>
 </div>
