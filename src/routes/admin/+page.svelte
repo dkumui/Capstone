@@ -25,15 +25,15 @@
 	}
 
 	function stockBadgeClass(stock: string): string {
-		if (stock === 'limited') return 'border-yellow-200 bg-yellow-100 text-yellow-800';
-		if (stock === 'sold_out') return 'border-red-200 bg-red-100 text-red-800';
-		return 'border-stone-200 bg-stone-100 text-stone-700';
+		if (stock === 'limited') return 'border-amber-200 bg-amber-50 text-amber-800';
+		if (stock === 'sold_out') return 'border-red-200 bg-red-50 text-red-800';
+		return 'border-stone-200 bg-stone-50 text-stone-700';
 	}
 
 	function statusBadgeClass(status: string): string {
-		if (status === 'open') return 'border-green-200 bg-green-100 text-green-800';
-		if (status === 'pending') return 'border-yellow-200 bg-yellow-100 text-yellow-800';
-		return 'border-stone-200 bg-stone-100 text-stone-700';
+		if (status === 'open') return 'border-emerald-200 bg-emerald-50 text-emerald-800';
+		if (status === 'pending') return 'border-amber-200 bg-amber-50 text-amber-800';
+		return 'border-stone-200 bg-stone-50 text-stone-700';
 	}
 
 	function formatDate(value: string | null | undefined): string {
@@ -54,88 +54,91 @@
 </svelte:head>
 
 <section class="space-y-6">
-	<header class="rounded-2xl border border-[#e2d1ba] bg-white p-5 shadow-sm">
-		<p class="text-xs font-semibold uppercase tracking-[0.18em] text-[#9f7a5a]">Dashboard</p>
-		<h1 class="mt-1 text-3xl font-bold text-[var(--color-brown)]">Overview</h1>
-		<p class="mt-2 max-w-2xl text-sm leading-6 text-[#6a5340]">
-			Ringkasan data produk, stok, dan chat pelanggan Batik HM Akmal dalam satu tampilan.
-		</p>
+	<header class="border border-[var(--color-line)] bg-white p-6 shadow-[0_22px_70px_rgba(43,41,38,0.07)] md:p-8">
+		<p class="eyebrow">Dashboard</p>
+		<div class="mt-3 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+			<div>
+				<h1 class="font-heading text-5xl font-bold leading-none tracking-[-0.04em] text-[var(--color-ink)] md:text-6xl">Overview</h1>
+				<p class="mt-4 max-w-2xl text-sm leading-7 text-[var(--color-muted)]">
+					Ringkasan data produk, stok, dan chat pelanggan Batik HM Akmal dalam satu tampilan.
+				</p>
+			</div>
+			<a class="btn-primary" href="/admin/products">Kelola produk</a>
+		</div>
 
-		<div class="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+		<div class="mt-7 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
 			{#each metrics as metric}
-				<article class="rounded-xl border border-[#eadac7] bg-[#fffaf3] p-4">
-					<p class="text-xs font-semibold uppercase tracking-wide text-[#9f7a5a]">
+				<article class="border border-[var(--color-line)] bg-[var(--color-soft-2)] p-5">
+					<p class="text-[0.68rem] font-black uppercase tracking-[0.2em] text-[var(--color-muted-2)]">
 						{metric.label}
 					</p>
-					<p class="mt-2 text-3xl font-black text-[var(--color-maroon)]">{metric.value}</p>
-					<p class="mt-1 text-xs text-[#8a715c]">{metric.hint}</p>
+					<p class="font-heading mt-3 text-5xl font-bold leading-none text-[var(--color-ink)]">{metric.value}</p>
+					<p class="mt-2 text-xs text-[var(--color-muted)]">{metric.hint}</p>
 				</article>
 			{/each}
 		</div>
 	</header>
 
 	<div class="grid gap-5 lg:grid-cols-2">
-		<section class="rounded-2xl border border-[#e2d1ba] bg-white p-5 shadow-sm">
+		<section class="border border-[var(--color-line)] bg-white p-5 shadow-[0_18px_60px_rgba(43,41,38,0.06)] md:p-6">
 			<div class="flex items-center justify-between gap-3">
-				<h2 class="text-xl font-bold text-[var(--color-brown)]">Produk Perlu Perhatian</h2>
+				<h2 class="font-heading text-3xl font-bold leading-none text-[var(--color-ink)]">Produk Perlu Perhatian</h2>
 				<span class="chip">{attentionProducts.length} item</span>
 			</div>
 
-			<div class="mt-4 space-y-3">
+			<div class="mt-5 space-y-3">
 				{#each attentionProducts.slice(0, 6) as product}
-					<div class="flex items-center justify-between gap-3 rounded-xl border border-[#eadac7] bg-[#fffaf3] p-3">
+					<div class="flex items-center justify-between gap-3 border border-[var(--color-line)] bg-[var(--color-soft-2)] p-3">
 						<div class="min-w-0">
-							<p class="truncate font-semibold text-[#4a3425]">{product.name}</p>
-							<p class="mt-0.5 font-mono text-xs text-[#8a715c]">
+							<p class="truncate font-bold text-[var(--color-ink)]">{product.name}</p>
+							<p class="mt-1 font-mono text-xs text-[var(--color-muted)]">
 								{product.product_code} • Stok: {product.stock_qty ?? 'Cek stok'}
 							</p>
 						</div>
-						<span class={`shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold ${stockBadgeClass(product.stock_status)}`}>
+						<span class={`shrink-0 border px-2.5 py-1 text-xs font-bold ${stockBadgeClass(product.stock_status)}`}>
 							{stockLabel(product.stock_status)}
 						</span>
 					</div>
 				{:else}
-					<p class="rounded-xl bg-[#fffaf3] p-3 text-sm text-[#6e5846]">
+					<p class="bg-[var(--color-soft-2)] p-4 text-sm text-[var(--color-muted)]">
 						Semua produk dalam kondisi ready.
 					</p>
 				{/each}
 			</div>
 
-			<a class="btn-secondary mt-4 inline-flex" href="/admin/products">Kelola Produk</a>
+			<a class="btn-secondary mt-5 inline-flex" href="/admin/products">Kelola Produk</a>
 		</section>
 
-		<section class="rounded-2xl border border-[#e2d1ba] bg-white p-5 shadow-sm">
+		<section class="border border-[var(--color-line)] bg-white p-5 shadow-[0_18px_60px_rgba(43,41,38,0.06)] md:p-6">
 			<div class="flex items-center justify-between gap-3">
-				<h2 class="text-xl font-bold text-[var(--color-brown)]">Chat Terbaru</h2>
+				<h2 class="font-heading text-3xl font-bold leading-none text-[var(--color-ink)]">Chat Terbaru</h2>
 				<span class="chip">{data.chatSessions.length} chat</span>
 			</div>
 
-			<div class="mt-4 space-y-3">
+			<div class="mt-5 space-y-3">
 				{#each data.chatSessions.slice(0, 6) as session}
 					<a
-						class="flex items-center justify-between gap-3 rounded-xl border border-[#eadac7] bg-[#fffaf3] p-3 transition hover:bg-[#f7eddf]"
+						class="flex items-center justify-between gap-3 border border-[var(--color-line)] bg-[var(--color-soft-2)] p-3 transition hover:bg-white hover:shadow-[0_16px_44px_rgba(43,41,38,0.08)]"
 						href={`/admin/chats/${session.id}`}
 					>
 						<div class="min-w-0">
-							<p class="truncate font-semibold text-[#4a3425]">
+							<p class="truncate font-bold text-[var(--color-ink)]">
 								{session.customer_name ?? 'Pelanggan tanpa nama'}
 							</p>
-							<p class="mt-0.5 text-xs text-[#8a715c]">
-								{formatDate(session.last_message_at)}
-							</p>
+							<p class="mt-1 text-xs text-[var(--color-muted)]">{formatDate(session.last_message_at)}</p>
 						</div>
-						<span class={`shrink-0 rounded-full border px-2.5 py-1 text-xs font-semibold capitalize ${statusBadgeClass(session.status)}`}>
+						<span class={`shrink-0 border px-2.5 py-1 text-xs font-bold capitalize ${statusBadgeClass(session.status)}`}>
 							{session.status}
 						</span>
 					</a>
 				{:else}
-					<p class="rounded-xl bg-[#fffaf3] p-3 text-sm text-[#6e5846]">
+					<p class="bg-[var(--color-soft-2)] p-4 text-sm text-[var(--color-muted)]">
 						Belum ada chat pelanggan.
 					</p>
 				{/each}
 			</div>
 
-			<a class="btn-secondary mt-4 inline-flex" href="/admin/chats">Lihat Semua Chat</a>
+			<a class="btn-secondary mt-5 inline-flex" href="/admin/chats">Lihat Semua Chat</a>
 		</section>
 	</div>
 </section>

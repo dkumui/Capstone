@@ -63,55 +63,55 @@
 
 <HeroSection {company} />
 
-<section class="section-shell py-10 md:py-14">
+<section class="section-shell py-12 md:py-16">
 	<div class="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-		<div class="surface-card p-6 md:p-8">
-			<p class="eyebrow">Tentang UMKM</p>
-			<h2 class="section-title mt-3">Batik Cap yang mudah dipilih, mudah ditanyakan.</h2>
+		<div class="bg-white p-6 md:p-10">
+			<p class="eyebrow">Batik stories</p>
+			<h2 class="section-title mt-4">Batik cap yang mudah dipilih.</h2>
 			<p class="section-description">{company.profile}</p>
-
-			<div class="mt-6 grid gap-3 sm:grid-cols-2">
-				<div class="rounded-2xl bg-[#fff7e8] p-4">
-					<p class="font-bold text-[var(--color-indigo)]">Fokus Produk</p>
-					<p class="mt-1 text-sm leading-6 text-[#6f5b47]">Katalog difokuskan pada Batik Cap 1 Warna dan 2 Warna.</p>
-				</div>
-
-				<div class="rounded-2xl bg-[#fff7e8] p-4">
-					<p class="font-bold text-[var(--color-indigo)]">Stok Transparan</p>
-					<p class="mt-1 text-sm leading-6 text-[#6f5b47]">Pelanggan dapat bertanya stok langsung melalui chatbot atau WhatsApp.</p>
-				</div>
-			</div>
+			<a href="#katalog" class="btn-primary mt-8">See all</a>
 		</div>
 
-		<div class="surface-card overflow-hidden p-6 md:p-8">
-			<p class="eyebrow">Alur Pembelian</p>
-			<h2 class="section-title mt-3">Pilih produk, tanyakan stok, lanjutkan pemesanan.</h2>
-
-			<div class="mt-6 grid gap-4">
-				<div class="flex gap-4 rounded-2xl border border-[#ead8bc] bg-white p-4">
-					<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-indigo)] text-sm font-black text-white">1</div>
-					<div>
-						<p class="font-bold text-[var(--color-brown)]">Lihat katalog</p>
-						<p class="mt-1 text-sm leading-6 text-[#6f5b47]">Gunakan filter Cap 1 Warna atau Cap 2 Warna sesuai kebutuhan.</p>
-					</div>
+		<div class="grid gap-4 sm:grid-cols-2">
+			<article class="border border-[var(--color-line)] bg-white p-5">
+				<div class="h-44 bg-[var(--color-soft)] p-4">
+					<img src="/placeholder-batik.svg" alt="Motif batik" class="h-full w-full object-cover" />
 				</div>
+				<h3 class="font-heading mt-5 text-3xl font-bold leading-none text-[var(--color-ink)]">Pilih motif</h3>
+				<p class="mt-3 text-sm leading-7 text-[var(--color-muted)]">Katalog menampilkan variasi cap, warna, ukuran, harga, dan status stok.</p>
+			</article>
 
-				<div class="flex gap-4 rounded-2xl border border-[#ead8bc] bg-white p-4">
-					<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-maroon)] text-sm font-black text-white">2</div>
-					<div>
-						<p class="font-bold text-[var(--color-brown)]">Tanya produk</p>
-						<p class="mt-1 text-sm leading-6 text-[#6f5b47]">Klik tombol Tanya Produk agar chatbot langsung membawa konteks produk.</p>
-					</div>
+			<article class="border border-[var(--color-line)] bg-white p-5">
+				<div class="h-44 bg-[var(--color-soft)] p-4">
+					<div class="h-full w-full batik-pattern"></div>
 				</div>
+				<h3 class="font-heading mt-5 text-3xl font-bold leading-none text-[var(--color-ink)]">Tanya admin</h3>
+				<p class="mt-3 text-sm leading-7 text-[var(--color-muted)]">Tombol Tanya Produk membawa konteks produk langsung ke chatbot.</p>
+			</article>
+		</div>
+	</div>
+</section>
 
-				<div class="flex gap-4 rounded-2xl border border-[#ead8bc] bg-white p-4">
-					<div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--color-gold)] text-sm font-black text-[#24170c]">3</div>
-					<div>
-						<p class="font-bold text-[var(--color-brown)]">Konfirmasi admin</p>
-						<p class="mt-1 text-sm leading-6 text-[#6f5b47]">Admin membantu cek stok, total harga, dan pengiriman.</p>
+<section class="section-shell py-12 md:py-16">
+	<div class="bg-white px-6 py-10 md:px-10">
+		<p class="eyebrow">How it works</p>
+		<h2 class="section-title mt-4">Alur pesan batik.</h2>
+
+		<div class="mt-10 grid gap-4 md:grid-cols-4">
+			{#each [
+				{ title: 'Select pattern', desc: 'Pilih motif dan jenis cap dari katalog.' },
+				{ title: 'Pick your style', desc: 'Cek warna, ukuran, harga, dan stok.' },
+				{ title: 'Ask product', desc: 'Klik Tanya Produk untuk memulai chat.' },
+				{ title: 'Checkout', desc: 'Admin membantu konfirmasi pesanan.' }
+			] as step, index}
+				<article class="border border-[var(--color-line)] bg-[var(--color-soft-2)] p-6 text-center">
+					<div class="mx-auto flex h-8 w-8 items-center justify-center rounded-full bg-[var(--color-charcoal)] text-xs font-black text-white">
+						{index + 1}
 					</div>
-				</div>
-			</div>
+					<h3 class="mt-5 text-sm font-black text-[var(--color-ink)]">{step.title}</h3>
+					<p class="mt-2 text-xs leading-6 text-[var(--color-muted)]">{step.desc}</p>
+				</article>
+			{/each}
 		</div>
 	</div>
 </section>

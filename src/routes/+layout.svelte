@@ -5,115 +5,124 @@
 	let { children } = $props();
 
 	const isAdminArea = $derived(String(page.url.pathname).startsWith('/admin'));
-
 	const year = new Date().getFullYear();
 
 	const navLinks = [
-		{ href: '/#katalog', label: 'Katalog' },
-		{ href: '/#layanan', label: 'Layanan' },
-		{ href: '/#kontak', label: 'Kontak' }
+		{ href: '/#katalog', label: 'Patterns' },
+		{ href: '/#layanan', label: 'Services' },
+		{ href: '/#kontak', label: 'Contact' }
 	];
 </script>
 
 {#if isAdminArea}
 	{@render children()}
 {:else}
-	<div class="flex min-h-screen flex-col">
-		<header class="site-nav">
-			<div class="section-shell flex h-16 items-center justify-between gap-4 md:h-20">
-				<a href="/" class="flex items-center gap-3">
-					<span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--color-indigo)] text-base font-black text-[var(--color-gold)] shadow-sm">
-						BA
-					</span>
-					<span class="leading-tight">
-						<span class="block text-base font-black tracking-tight text-[var(--color-indigo)] md:text-lg">
-							Batik HM Akmal
-						</span>
-						<span class="block text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[var(--color-copper)]">
-							Unggul Jaya Banyurip
-						</span>
-					</span>
+	<div class="min-h-screen">
+		<aside class="fixed bottom-0 left-0 top-0 z-50 hidden w-[148px] border-r border-[var(--color-line)] bg-white lg:flex lg:flex-col">
+			<div class="flex h-24 items-center justify-center">
+				<a href="/" class="flex h-8 w-8 items-center justify-center bg-[var(--color-charcoal)] text-[0.7rem] font-black tracking-[0.12em] text-white">
+					HM
 				</a>
+			</div>
 
-				<nav class="hidden items-center gap-1 md:flex">
-					{#each navLinks as link}
-						<a
-							class="rounded-full px-4 py-2 text-sm font-bold text-[var(--color-brown)] transition hover:bg-[#fff3df] hover:text-[var(--color-indigo)]"
-							href={link.href}
-						>
-							{link.label}
-						</a>
-					{/each}
-				</nav>
-
-				<div class="flex items-center gap-2">
-					<a class="hidden btn-gold px-4 py-2 text-xs sm:inline-flex" href="/#katalog">
-						Lihat Katalog
+			<nav class="mt-24 space-y-6 px-7 text-[0.72rem] font-extrabold text-[var(--color-ink)]">
+				{#each navLinks as link}
+					<a class="group flex items-center gap-3 transition hover:text-[var(--color-accent)]" href={link.href}>
+						<span class="h-1.5 w-1.5 rounded-full border border-current transition group-hover:bg-current"></span>
+						{link.label}
 					</a>
-					<a class="btn-secondary px-4 py-2 text-xs" href="/admin">Admin</a>
+				{/each}
+			</nav>
+
+			<div class="mt-auto px-7 pb-8">
+				<a class="block text-[0.72rem] font-extrabold text-[var(--color-ink)] transition hover:text-[var(--color-accent)]" href="/#kontak">
+					Blog
+				</a>
+				<div class="mt-10 border-t border-[var(--color-line)] pt-7">
+					<p class="text-[0.62rem] uppercase tracking-[0.2em] text-[var(--color-muted-2)]">Chat with us</p>
+					<p class="mt-2 text-[0.72rem] font-bold text-[var(--color-green)]">Online</p>
+				</div>
+				<div class="mt-8 flex gap-3 text-[0.7rem] font-black text-[var(--color-muted)]">
+					<span>f</span>
+					<span>x</span>
+					<span>ig</span>
 				</div>
 			</div>
+		</aside>
 
-			<div class="border-t border-[var(--color-line)] bg-white/70 md:hidden">
-				<div class="section-shell flex gap-2 overflow-x-auto py-2.5 text-sm">
-					{#each navLinks as link}
-						<a
-							class="shrink-0 rounded-full bg-[#fff3df] px-4 py-1.5 font-bold text-[var(--color-brown)]"
-							href={link.href}
-						>
-							{link.label}
+		<div class="lg:pl-[148px]">
+			<header class="site-nav">
+				<div class="section-shell flex h-16 items-center justify-between gap-4 md:h-[74px]">
+					<a href="/" class="flex items-center gap-3 lg:hidden">
+						<span class="flex h-8 w-8 items-center justify-center bg-[var(--color-charcoal)] text-[0.7rem] font-black tracking-[0.12em] text-white">
+							HM
+						</span>
+						<span class="text-sm font-black text-[var(--color-ink)]">Batik HM Akmal</span>
+					</a>
+
+					<div class="hidden items-center gap-3 text-[0.75rem] font-semibold text-[var(--color-muted)] lg:flex">
+						<span class="text-sm">⌕</span>
+						<span>Search pattern or style</span>
+					</div>
+
+					<nav class="hidden items-center gap-7 md:flex">
+						{#each navLinks as link}
+							<a class="text-[0.72rem] font-black uppercase tracking-[0.18em] text-[var(--color-muted)] transition hover:text-[var(--color-accent)]" href={link.href}>
+								{link.label}
+							</a>
+						{/each}
+					</nav>
+
+					<div class="flex items-center gap-3">
+						<a class="hidden text-[0.72rem] font-black uppercase tracking-[0.18em] text-[var(--color-accent)] sm:inline-flex" href="/#katalog">
+							Shop in
 						</a>
-					{/each}
+						<a class="btn-secondary px-4 py-2 text-[0.68rem]" href="/admin">Admin</a>
+					</div>
 				</div>
-			</div>
-		</header>
+			</header>
 
-		<main class="flex-1">
-			{@render children()}
-		</main>
+			<main class="min-h-screen bg-[var(--color-canvas)]">
+				{@render children()}
+			</main>
 
-		<footer class="mt-auto border-t border-[var(--color-line)] bg-[var(--color-indigo)] text-white">
-			<div class="section-shell grid gap-8 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
-				<div>
-					<p class="text-lg font-black">Batik HM Akmal</p>
-					<p class="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-gold)]">
-						Unggul Jaya Banyurip
-					</p>
-					<p class="mt-4 max-w-sm text-sm leading-7 text-white/70">
-						Produsen Batik Cap khas Pekalongan untuk kebutuhan kain, jahit, seragam, dan
-						koleksi harian. Katalog digital, pemesanan via chatbot atau WhatsApp.
-					</p>
+			<footer class="border-t border-[var(--color-line)] bg-white">
+				<div class="section-shell grid gap-10 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
+					<div>
+						<p class="font-heading text-4xl font-bold leading-none text-[var(--color-ink)]">Batik HM Akmal</p>
+						<p class="mt-3 text-[0.7rem] font-black uppercase tracking-[0.26em] text-[var(--color-accent)]">
+							Unggul Jaya Banyurip
+						</p>
+						<p class="mt-5 max-w-sm text-sm leading-7 text-[var(--color-muted)]">
+							Katalog Batik Cap Pekalongan untuk kebutuhan kain, jahit, seragam, dan pemesanan langsung melalui admin.
+						</p>
+					</div>
+
+					<div>
+						<p class="text-[0.7rem] font-black uppercase tracking-[0.24em] text-[var(--color-ink)]">Navigasi</p>
+						<ul class="mt-5 space-y-3 text-sm text-[var(--color-muted)]">
+							<li><a class="transition hover:text-[var(--color-accent)]" href="/#katalog">Katalog Produk</a></li>
+							<li><a class="transition hover:text-[var(--color-accent)]" href="/#layanan">Layanan</a></li>
+							<li><a class="transition hover:text-[var(--color-accent)]" href="/#kontak">Kontak</a></li>
+							<li><a class="transition hover:text-[var(--color-accent)]" href="/admin">Dashboard Admin</a></li>
+						</ul>
+					</div>
+
+					<div>
+						<p class="text-[0.7rem] font-black uppercase tracking-[0.24em] text-[var(--color-ink)]">Lokasi</p>
+						<p class="mt-5 text-sm leading-7 text-[var(--color-muted)]">
+							Banyurip, Pekalongan Selatan,<br />Kota Pekalongan, Jawa Tengah
+						</p>
+					</div>
 				</div>
 
-				<div>
-					<p class="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-gold)]">
-						Navigasi
-					</p>
-					<ul class="mt-4 space-y-2 text-sm text-white/75">
-						<li><a class="transition hover:text-white" href="/#katalog">Katalog Produk</a></li>
-						<li><a class="transition hover:text-white" href="/#layanan">Layanan</a></li>
-						<li><a class="transition hover:text-white" href="/#kontak">Kontak &amp; Lokasi</a></li>
-						<li><a class="transition hover:text-white" href="/admin">Dashboard Admin</a></li>
-					</ul>
+				<div class="border-t border-[var(--color-line)]">
+					<div class="section-shell flex flex-col gap-2 py-5 text-xs text-[var(--color-muted)] sm:flex-row sm:items-center sm:justify-between">
+						<p>&copy; {year} Batik HM Akmal. Seluruh hak cipta dilindungi.</p>
+						<p>Minimalist editorial batik catalog.</p>
+					</div>
 				</div>
-
-				<div>
-					<p class="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-gold)]">
-						Lokasi
-					</p>
-					<p class="mt-4 text-sm leading-7 text-white/75">
-						Banyurip, Pekalongan Selatan,<br />
-						Kota Pekalongan, Jawa Tengah
-					</p>
-				</div>
-			</div>
-
-			<div class="border-t border-white/10">
-				<div class="section-shell flex flex-col gap-1 py-5 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-					<p>&copy; {year} Batik HM Akmal. Seluruh hak cipta dilindungi.</p>
-					<p>Katalog Batik Cap Pekalongan</p>
-				</div>
-			</div>
-		</footer>
+			</footer>
+		</div>
 	</div>
 {/if}

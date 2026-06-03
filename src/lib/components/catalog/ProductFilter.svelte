@@ -14,8 +14,8 @@
 	}>();
 </script>
 
-<div class="rounded-[1.5rem] border border-[#ead8bc] bg-white/90 p-4 soft-shadow">
-	<div class="grid gap-3 lg:grid-cols-[1fr_360px]">
+<div class="border border-[var(--color-line)] bg-white p-4">
+	<div class="grid gap-3 lg:grid-cols-[1fr_380px]">
 		<div class="grid gap-2 sm:grid-cols-3">
 			<button
 				type="button"
@@ -43,8 +43,8 @@
 		</div>
 
 		<input
-			class="w-full rounded-full border border-[#dbc7af] bg-[#fffaf2] px-5 py-3 text-sm outline-none transition focus:border-[var(--color-gold)] focus:ring-4 focus:ring-[#c89235]/15"
-			placeholder="Cari warna, misalnya biru atau maroon..."
+			class="input-editorial"
+			placeholder="Search color, code, or style..."
 			value={searchColor}
 			oninput={(event) => onSearchChange((event.currentTarget as HTMLInputElement).value)}
 		/>

@@ -32,23 +32,33 @@
 	});
 </script>
 
-<section id="katalog" class="section-shell py-10 md:py-16">
-	<div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+<section id="katalog" class="section-shell py-12 md:py-16">
+	<div class="grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
 		<div>
-			<p class="eyebrow">Katalog Produk</p>
-			<h2 class="section-title mt-3">Pilih Batik Cap sesuai warna dan kebutuhan.</h2>
+			<p class="eyebrow">300+ Patterns</p>
+			<h2 class="section-title mt-4">Katalog batik.</h2>
 			<p class="section-description">
-				Gunakan filter untuk menemukan produk. Stok dapat berubah, sehingga pelanggan disarankan bertanya terlebih dahulu.
+				Gunakan filter untuk menemukan produk. Stok dapat berubah karena penjualan offline dan pemesanan chat.
 			</p>
 		</div>
 
-		<div class="rounded-2xl border border-[#ead8bc] bg-white/80 px-5 py-4">
-			<p class="text-sm font-bold text-[var(--color-indigo)]">{activeProducts.length} produk aktif</p>
-			<p class="mt-1 text-xs text-[#7a634f]">Terhubung dengan data admin</p>
+		<div class="grid gap-3 sm:grid-cols-3">
+			<div class="border border-[var(--color-line)] bg-white p-4">
+				<p class="font-heading text-4xl font-bold leading-none text-[var(--color-ink)]">{activeProducts.length}</p>
+				<p class="mt-2 text-[0.7rem] font-black uppercase tracking-[0.18em] text-[var(--color-muted)]">Produk aktif</p>
+			</div>
+			<div class="border border-[var(--color-line)] bg-white p-4">
+				<p class="font-heading text-4xl font-bold leading-none text-[var(--color-ink)]">1</p>
+				<p class="mt-2 text-[0.7rem] font-black uppercase tracking-[0.18em] text-[var(--color-muted)]">Cap satu warna</p>
+			</div>
+			<div class="border border-[var(--color-line)] bg-white p-4">
+				<p class="font-heading text-4xl font-bold leading-none text-[var(--color-ink)]">2</p>
+				<p class="mt-2 text-[0.7rem] font-black uppercase tracking-[0.18em] text-[var(--color-muted)]">Cap dua warna</p>
+			</div>
 		</div>
 	</div>
 
-	<div class="mt-7">
+	<div class="mt-8">
 		<ProductFilter
 			{selectedCap}
 			{searchColor}
@@ -58,12 +68,12 @@
 	</div>
 
 	{#if filtered.length === 0}
-		<div class="mt-6 rounded-[1.5rem] border border-dashed border-[#d4bfa5] bg-white/80 p-8 text-center">
-			<p class="font-bold text-[var(--color-brown)]">Produk tidak ditemukan.</p>
-			<p class="mt-2 text-sm text-[#6d5644]">Coba ubah jenis cap atau kata kunci warna.</p>
+		<div class="mt-6 border border-dashed border-[var(--color-line)] bg-white p-10 text-center">
+			<p class="font-bold text-[var(--color-ink)]">Produk tidak ditemukan.</p>
+			<p class="mt-2 text-sm text-[var(--color-muted)]">Coba ubah jenis cap atau kata kunci warna.</p>
 		</div>
 	{:else}
-		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+		<div class="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 			{#each filtered as product (product.product_code)}
 				<ProductCard {product} {onAskProduct} />
 			{/each}

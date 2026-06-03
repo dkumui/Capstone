@@ -6,62 +6,49 @@
 	const whatsappHref = $derived(`https://wa.me/${company.whatsapp_number}`);
 </script>
 
-<section id="kontak" class="section-shell pb-16 pt-10 md:pb-20 md:pt-16">
-	<div class="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
-		<div class="relative overflow-hidden rounded-[2rem] bg-[var(--color-indigo)] p-6 text-white card-shadow md:p-8">
-			<div class="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[var(--color-gold)]/20 blur-3xl"></div>
-			<div class="absolute -bottom-24 left-10 h-56 w-56 rounded-full bg-white/10 blur-3xl"></div>
+<section id="kontak" class="section-shell pb-16 pt-12 md:pb-20 md:pt-16">
+	<div class="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+		<div class="bg-white p-6 md:p-10">
+			<p class="eyebrow">Contact</p>
+			<h2 class="section-title mt-4">Kunjungi toko atau hubungi admin.</h2>
+			<p class="section-description">
+				Konfirmasi stok sebelum memesan karena produk dapat terjual melalui toko offline atau chat pelanggan lain.
+			</p>
 
-			<div class="relative">
-				<p class="text-xs font-black uppercase tracking-[0.22em] text-[#f0c777]">Alamat & Kontak</p>
-				<h2 class="mt-3 text-3xl font-black tracking-tight md:text-4xl">
-					Kunjungi toko atau hubungi admin untuk cek stok.
-				</h2>
-
-				<div class="mt-7 space-y-4">
-					<div class="rounded-2xl border border-white/15 bg-white/10 p-4">
-						<p class="text-xs font-semibold uppercase tracking-wide text-white/60">Alamat</p>
-						<p class="mt-2 text-sm leading-7 text-white/90">{company.address}</p>
-					</div>
-
-					<div class="rounded-2xl border border-white/15 bg-white/10 p-4">
-						<p class="text-xs font-semibold uppercase tracking-wide text-white/60">Jam Operasional</p>
-						<p class="mt-2 text-sm leading-7 text-white/90">{company.operation_hours}</p>
-					</div>
-				</div>
-
-				<div class="mt-7 flex flex-col gap-3 sm:flex-row">
-					<a class="btn-gold" href={whatsappHref} target="_blank" rel="noreferrer">
-						WhatsApp Admin
-					</a>
-
-					<a class="inline-flex items-center justify-center rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-bold text-white transition hover:bg-white/20" href={company.maps_url} target="_blank" rel="noreferrer">
-						Buka Rute Lokasi
-					</a>
-				</div>
+			<div class="mt-8 flex flex-col gap-3 sm:flex-row">
+				<a class="btn-primary" href={whatsappHref} target="_blank" rel="noreferrer">WhatsApp Admin</a>
+				<a class="btn-secondary" href={company.maps_url} target="_blank" rel="noreferrer">Buka rute</a>
 			</div>
 		</div>
 
-		<div class="surface-card p-6 md:p-8">
-			<p class="eyebrow">Catatan Belanja</p>
-			<h3 class="mt-3 text-2xl font-black text-[var(--color-brown)]">Sebelum memesan, konfirmasi stok terlebih dahulu.</h3>
+		<div class="grid gap-4 md:grid-cols-2">
+			<article class="border border-[var(--color-line)] bg-white p-6">
+				<p class="text-[0.7rem] font-black uppercase tracking-[0.22em] text-[var(--color-accent)]">Alamat</p>
+				<p class="mt-4 text-sm leading-7 text-[var(--color-muted)]">{company.address}</p>
+			</article>
 
-			<div class="mt-6 space-y-3">
-				<div class="rounded-2xl bg-[#fff7e8] p-4">
-					<p class="font-bold text-[var(--color-indigo)]">Stok dapat berubah</p>
-					<p class="mt-1 text-sm leading-6 text-[#6f5b47]">Produk bisa terjual melalui toko offline atau chat, sehingga stok perlu dikonfirmasi.</p>
-				</div>
+			<article class="border border-[var(--color-line)] bg-white p-6">
+				<p class="text-[0.7rem] font-black uppercase tracking-[0.22em] text-[var(--color-accent)]">Jam operasional</p>
+				<p class="mt-4 text-sm leading-7 text-[var(--color-muted)]">{company.operation_hours}</p>
+			</article>
 
-				<div class="rounded-2xl bg-[#fff7e8] p-4">
-					<p class="font-bold text-[var(--color-indigo)]">Warna foto bisa berbeda</p>
-					<p class="mt-1 text-sm leading-6 text-[#6f5b47]">Perbedaan layar dan pencahayaan dapat memengaruhi tampilan warna kain.</p>
+			<article class="border border-[var(--color-line)] bg-white p-6 md:col-span-2">
+				<p class="text-[0.7rem] font-black uppercase tracking-[0.22em] text-[var(--color-accent)]">Catatan belanja</p>
+				<div class="mt-5 grid gap-3 md:grid-cols-3">
+					<div class="bg-[var(--color-soft-2)] p-4">
+						<p class="font-bold text-[var(--color-ink)]">Stok berubah</p>
+						<p class="mt-2 text-xs leading-6 text-[var(--color-muted)]">Selalu cek ketersediaan stok terlebih dahulu.</p>
+					</div>
+					<div class="bg-[var(--color-soft-2)] p-4">
+						<p class="font-bold text-[var(--color-ink)]">Warna foto</p>
+						<p class="mt-2 text-xs leading-6 text-[var(--color-muted)]">Warna dapat berbeda karena layar dan pencahayaan.</p>
+					</div>
+					<div class="bg-[var(--color-soft-2)] p-4">
+						<p class="font-bold text-[var(--color-ink)]">Tanya produk</p>
+						<p class="mt-2 text-xs leading-6 text-[var(--color-muted)]">Chatbot membaca produk yang dipilih dari katalog.</p>
+					</div>
 				</div>
-
-				<div class="rounded-2xl bg-[#fff7e8] p-4">
-					<p class="font-bold text-[var(--color-indigo)]">Bisa tanya produk spesifik</p>
-					<p class="mt-1 text-sm leading-6 text-[#6f5b47]">Klik Tanya Produk di katalog agar chatbot langsung mengenali produk yang dipilih.</p>
-				</div>
-			</div>
+			</article>
 		</div>
 	</div>
 </section>
