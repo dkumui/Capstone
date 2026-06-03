@@ -1,12 +1,7 @@
 import { getPublicProducts as getInventoryProducts, getStockByProductCode } from '$lib/services/inventoryService';
 import type { Product, ProductFilterInput } from '$lib/types/domain';
-
-function toSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
-}
+import { capTypeLabel } from '$lib/utils/format';
+import { toSlug } from '$lib/utils/slug';
 
 function toLegacyStockStatus(stockStatus: 'ready' | 'limited' | 'sold_out' | 'check_stock' | 'not_found'): Product['stockStatus'] {
   if (stockStatus === 'ready') return 'IN_STOCK';
@@ -34,7 +29,7 @@ export async function getPublicProducts(filter: ProductFilterInput = {}): Promis
         id: product.id,
         slug: toSlug(product.name),
         name: product.name,
-        capType: product.cap_type === 'cap_1_warna' ? 'CAP_1_WARNA' : 'CAP_2_WARNA',
+        capType: product.cap_type === 'cap_1_warna' ? 'CAP_1_WARNA' as const : 'CAP_2_WARNA' as const,
         colorVariant: product.color_variant,
         sizeText: product.size_note ?? `Kurang lebih ${product.size_length_cm} x ${product.size_width_cm} cm`,
         price: product.price,

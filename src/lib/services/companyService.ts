@@ -2,6 +2,7 @@ import { DEFAULT_COMPANY_SETTINGS, DEFAULT_SERVICES } from '$lib/config/defaults
 import { createServerSupabaseClient } from '$lib/supabase/server';
 import type { CompanySettings, ServiceItem } from '$lib/types/domain';
 import { createAdminSupabaseClient } from '$lib/supabase/admin';
+import { type ServiceResult, ok, err } from '$lib/utils/result';
 
 export async function getCompanySettings(): Promise<CompanySettings> {
   const supabase = createServerSupabaseClient();
@@ -54,18 +55,23 @@ export interface UpdateCompanySettingsInput {
 	googleMapsLink: string;
 }
 
-export async function updateCompanySettings(input: UpdateCompanySettingsInput): Promise<{
-	success: boolean;
-	message: string;
-}> {
+export async function updateCompanySettings(input: UpdateCompanySettingsInput): Promise<ServiceResult> {
 	const supabase = createAdminSupabaseClient();
 
 	if (!supabase) {
-		return {
-			success: false,
-			message: 'Supabase admin client belum dikonfigurasi.'
-		};
+		return err('Supabase admin client belum dikonfigurasi.');
 	}
+
+	const payload = {
+		business_name: input.businessName,
+		alt_business_name: input.altBusinessName,
+		description: input.description,
+		address: input.address,
+		whatsapp_number: input.whatsappNumber,
+		contact_phone: input.contactPhone,
+		operation_hours: input.operationHours,
+		google_maps_link: input.googleMapsLink
+	};
 
 	const { data: existing, error: findError } = await supabase
 		.from('company_settings')
@@ -73,61 +79,20 @@ export async function updateCompanySettings(input: UpdateCompanySettingsInput): 
 		.limit(1)
 		.maybeSingle();
 
-	if (findError) {
-		return {
-			success: false,
-			message: findError.message
-		};
-	}
+	if (findError) return err(findError.message);
 
 	if (!existing) {
-		const { error } = await supabase.from('company_settings').insert({
-			business_name: input.businessName,
-			alt_business_name: input.altBusinessName,
-			description: input.description,
-			address: input.address,
-			whatsapp_number: input.whatsappNumber,
-			contact_phone: input.contactPhone,
-			operation_hours: input.operationHours,
-			google_maps_link: input.googleMapsLink
-		});
-
-		if (error) {
-			return {
-				success: false,
-				message: error.message
-			};
-		}
-
-		return {
-			success: true,
-			message: 'Data toko berhasil dibuat.'
-		};
+		const { error } = await supabase.from('company_settings').insert(payload);
+		if (error) return err(error.message);
+		return ok('Data toko berhasil dibuat.');
 	}
 
 	const { error } = await supabase
 		.from('company_settings')
-		.update({
-			business_name: input.businessName,
-			alt_business_name: input.altBusinessName,
-			description: input.description,
-			address: input.address,
-			whatsapp_number: input.whatsappNumber,
-			contact_phone: input.contactPhone,
-			operation_hours: input.operationHours,
-			google_maps_link: input.googleMapsLink
-		})
+		.update(payload)
 		.eq('id', existing.id);
 
-	if (error) {
-		return {
-			success: false,
-			message: error.message
-		};
-	}
+	if (error) return err(error.message);
 
-	return {
-		success: true,
-		message: 'Data toko berhasil diperbarui.'
-	};
+	return ok('Data toko berhasil diperbarui.');
 }

@@ -6,6 +6,7 @@ import {
 	getNullableNumber,
 	parseCapType
 } from '$lib/server/admin';
+import { capTypeLabel } from '$lib/utils/format';
 import { uploadProductImage } from '$lib/services/uploadService';
 import {
 	createProduct,
@@ -47,7 +48,7 @@ export const actions = {
 
         const name =
             getString(formData, 'name') ||
-            `${capType === 'cap_1_warna' ? 'Cap 1 Warna' : 'Cap 2 Warna'} ${colorVariant}`;
+            `${capTypeLabel(capType)} ${colorVariant}`;
 
         let imageUrl = getString(formData, 'image_url') || null;
 

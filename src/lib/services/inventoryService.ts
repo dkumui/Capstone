@@ -2,6 +2,7 @@ import { MOCK_PRODUCTS } from '$lib/mock/products';
 import { createServerSupabaseClient } from '$lib/supabase/server';
 import type { ProductTableRow } from '$lib/types/product-table';
 import { createAdminSupabaseClient } from '$lib/supabase/admin';
+import { type ServiceResult, ok, err } from '$lib/utils/result';
 
 export type InventoryStockStatus = 'ready' | 'limited' | 'sold_out' | 'check_stock' | 'not_found';
 
@@ -19,6 +20,8 @@ export interface InventoryTransactionInput {
   changedBy?: string | null;
   note?: string | null;
 }
+
+const PRODUCT_COLUMNS = 'id, product_code, name, product_type, cap_type, color_variant, size_length_cm, size_width_cm, size_note, price, stock_qty, image_url, description, is_featured, is_active, source, created_at, updated_at' as const;
 
 function computeStockStatus(stockQty: number | null | undefined): Exclude<InventoryStockStatus, 'not_found'> {
   if (stockQty === null || stockQty === undefined) return 'check_stock';
@@ -62,13 +65,19 @@ function getMockProducts(): ProductTableRow[] {
   }));
 }
 
+function requireAdmin(): ServiceResult | Exclude<ReturnType<typeof createAdminSupabaseClient>, null> {
+	const supabase = createAdminSupabaseClient();
+	if (!supabase) return err('Supabase admin client belum dikonfigurasi.');
+	return supabase;
+}
+
 export async function getPublicProducts(): Promise<ProductTableRow[]> {
   const supabase = createServerSupabaseClient();
   if (!supabase) return getMockProducts();
 
   const { data } = await supabase
     .from('products')
-    .select('id, product_code, name, product_type, cap_type, color_variant, size_length_cm, size_width_cm, size_note, price, stock_qty, image_url, description, is_featured, is_active, source, created_at, updated_at')
+    .select(PRODUCT_COLUMNS)
     .eq('is_active', true)
     .order('created_at', { ascending: false });
 
@@ -125,7 +134,7 @@ export async function getAdminProducts(): Promise<ProductTableRow[]> {
 
 	const { data, error } = await supabase
 		.from('products')
-		.select('id, product_code, name, product_type, cap_type, color_variant, size_length_cm, size_width_cm, size_note, price, stock_qty, image_url, description, is_featured, is_active, source, created_at, updated_at')
+		.select(PRODUCT_COLUMNS)
 		.order('created_at', { ascending: false });
 
 	if (error || !data) {
@@ -176,20 +185,11 @@ export interface UpdateStockInput {
 	stockQty: number | null;
 }
 
-export async function createProduct(input: CreateProductInput): Promise<{
-	success: boolean;
-	message: string;
-}> {
-	const supabase = createAdminSupabaseClient();
+export async function createProduct(input: CreateProductInput): Promise<ServiceResult> {
+	const client = requireAdmin();
+	if ('success' in client) return client;
 
-	if (!supabase) {
-		return {
-			success: false,
-			message: 'Supabase admin client belum dikonfigurasi.'
-		};
-	}
-
-	const { error } = await supabase.from('products').insert({
+	const { error } = await client.from('products').insert({
 		product_code: input.productCode,
 		name: input.name,
 		product_type: 'batik_cap',
@@ -208,33 +208,16 @@ export async function createProduct(input: CreateProductInput): Promise<{
 		source: 'manual'
 	});
 
-	if (error) {
-		return {
-			success: false,
-			message: error.message
-		};
-	}
+	if (error) return err(error.message);
 
-	return {
-		success: true,
-		message: 'Produk berhasil ditambahkan.'
-	};
+	return ok('Produk berhasil ditambahkan.');
 }
 
-export async function updateStockByProductCode(input: UpdateStockInput): Promise<{
-	success: boolean;
-	message: string;
-}> {
-	const supabase = createAdminSupabaseClient();
+export async function updateStockByProductCode(input: UpdateStockInput): Promise<ServiceResult> {
+	const client = requireAdmin();
+	if ('success' in client) return client;
 
-	if (!supabase) {
-		return {
-			success: false,
-			message: 'Supabase admin client belum dikonfigurasi.'
-		};
-	}
-
-	const { error } = await supabase
+	const { error } = await client
 		.from('products')
 		.update({
 			stock_qty: input.stockQty,
@@ -242,78 +225,36 @@ export async function updateStockByProductCode(input: UpdateStockInput): Promise
 		})
 		.eq('product_code', input.productCode);
 
-	if (error) {
-		return {
-			success: false,
-			message: error.message
-		};
-	}
+	if (error) return err(error.message);
 
-	return {
-		success: true,
-		message: 'Stok produk berhasil diperbarui.'
-	};
+	return ok('Stok produk berhasil diperbarui.');
 }
 
-export async function toggleProductActive(productCode: string, isActive: boolean): Promise<{
-	success: boolean;
-	message: string;
-}> {
-	const supabase = createAdminSupabaseClient();
+export async function toggleProductActive(productCode: string, isActive: boolean): Promise<ServiceResult> {
+	const client = requireAdmin();
+	if ('success' in client) return client;
 
-	if (!supabase) {
-		return {
-			success: false,
-			message: 'Supabase admin client belum dikonfigurasi.'
-		};
-	}
-
-	const { error } = await supabase
+	const { error } = await client
 		.from('products')
 		.update({
 			is_active: isActive
 		})
 		.eq('product_code', productCode);
 
-	if (error) {
-		return {
-			success: false,
-			message: error.message
-		};
-	}
+	if (error) return err(error.message);
 
-	return {
-		success: true,
-		message: isActive ? 'Produk berhasil diaktifkan.' : 'Produk berhasil disembunyikan.'
-	};
+	return ok(isActive ? 'Produk berhasil diaktifkan.' : 'Produk berhasil disembunyikan.');
 }
 
-export async function deleteProductByProductCode(productCode: string): Promise<{
-	success: boolean;
-	message: string;
-}> {
-	const supabase = createAdminSupabaseClient();
+export async function deleteProductByProductCode(productCode: string): Promise<ServiceResult> {
+	const client = requireAdmin();
+	if ('success' in client) return client;
 
-	if (!supabase) {
-		return {
-			success: false,
-			message: 'Supabase admin client belum dikonfigurasi.'
-		};
-	}
+	const { error } = await client.from('products').delete().eq('product_code', productCode);
 
-	const { error } = await supabase.from('products').delete().eq('product_code', productCode);
+	if (error) return err(error.message);
 
-	if (error) {
-		return {
-			success: false,
-			message: error.message
-		};
-	}
-
-	return {
-		success: true,
-		message: 'Produk berhasil dihapus.'
-	};
+	return ok('Produk berhasil dihapus.');
 }
 
 export interface UpdateProductInput {
@@ -332,20 +273,11 @@ export interface UpdateProductInput {
 	isActive: boolean;
 }
 
-export async function updateProductByProductCode(input: UpdateProductInput): Promise<{
-	success: boolean;
-	message: string;
-}> {
-	const supabase = createAdminSupabaseClient();
+export async function updateProductByProductCode(input: UpdateProductInput): Promise<ServiceResult> {
+	const client = requireAdmin();
+	if ('success' in client) return client;
 
-	if (!supabase) {
-		return {
-			success: false,
-			message: 'Supabase admin client belum dikonfigurasi.'
-		};
-	}
-
-	const { error } = await supabase
+	const { error } = await client
 		.from('products')
 		.update({
 			name: input.name,
@@ -364,48 +296,23 @@ export async function updateProductByProductCode(input: UpdateProductInput): Pro
 		})
 		.eq('product_code', input.productCode);
 
-	if (error) {
-		return {
-			success: false,
-			message: error.message
-		};
-	}
+	if (error) return err(error.message);
 
-	return {
-		success: true,
-		message: 'Produk berhasil diperbarui.'
-	};
+	return ok('Produk berhasil diperbarui.');
 }
 
-export async function updateProductImageByProductCode(productCode: string, imageUrl: string): Promise<{
-	success: boolean;
-	message: string;
-}> {
-	const supabase = createAdminSupabaseClient();
+export async function updateProductImageByProductCode(productCode: string, imageUrl: string): Promise<ServiceResult> {
+	const client = requireAdmin();
+	if ('success' in client) return client;
 
-	if (!supabase) {
-		return {
-			success: false,
-			message: 'Supabase admin client belum dikonfigurasi.'
-		};
-	}
-
-	const { error } = await supabase
+	const { error } = await client
 		.from('products')
 		.update({
 			image_url: imageUrl
 		})
 		.eq('product_code', productCode);
 
-	if (error) {
-		return {
-			success: false,
-			message: error.message
-		};
-	}
+	if (error) return err(error.message);
 
-	return {
-		success: true,
-		message: 'Foto produk berhasil diperbarui.'
-	};
+	return ok('Foto produk berhasil diperbarui.');
 }

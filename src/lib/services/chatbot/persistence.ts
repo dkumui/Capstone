@@ -1,4 +1,5 @@
 import { createAdminSupabaseClient } from '$lib/supabase/admin';
+import { type ServiceResult, ok, err } from '$lib/utils/result';
 
 export type ChatSender = 'user' | 'assistant' | 'admin';
 export type ChatSessionStatus = 'open' | 'pending' | 'closed';
@@ -220,15 +221,10 @@ export async function getAdminChatThread(sessionId: string): Promise<{
 export async function insertAdminChatReply(params: {
 	sessionId: string;
 	message: string;
-}): Promise<{ success: boolean; message: string }> {
+}): Promise<ServiceResult> {
 	const supabase = createAdminSupabaseClient();
 
-	if (!params.message.trim()) {
-		return {
-			success: false,
-			message: 'Pesan balasan tidak boleh kosong.'
-		};
-	}
+	if (!params.message.trim()) return err('Pesan balasan tidak boleh kosong.');
 
 	const now = new Date().toISOString();
 
@@ -257,10 +253,7 @@ export async function insertAdminChatReply(params: {
 			});
 		}
 
-		return {
-			success: true,
-			message: 'Balasan admin berhasil disimpan.'
-		};
+		return ok('Balasan admin berhasil disimpan.');
 	}
 
 	const { error: insertError } = await supabase.from('chat_messages').insert({
@@ -269,12 +262,7 @@ export async function insertAdminChatReply(params: {
 		message: params.message.trim()
 	});
 
-	if (insertError) {
-		return {
-			success: false,
-			message: insertError.message
-		};
-	}
+	if (insertError) return err(insertError.message);
 
 	const { error: updateError } = await supabase
 		.from('chat_sessions')
@@ -284,30 +272,19 @@ export async function insertAdminChatReply(params: {
 		})
 		.eq('id', params.sessionId);
 
-	if (updateError) {
-		return {
-			success: false,
-			message: updateError.message
-		};
-	}
+	if (updateError) return err(updateError.message);
 
-	return {
-		success: true,
-		message: 'Balasan admin berhasil disimpan.'
-	};
+	return ok('Balasan admin berhasil disimpan.');
 }
 
 export async function updateChatSessionStatus(params: {
 	sessionId: string;
 	status: ChatSessionStatus;
-}): Promise<{ success: boolean; message: string }> {
+}): Promise<ServiceResult> {
 	const supabase = createAdminSupabaseClient();
 
 	if (!['open', 'pending', 'closed'].includes(params.status)) {
-		return {
-			success: false,
-			message: 'Status chat tidak valid.'
-		};
+		return err('Status chat tidak valid.');
 	}
 
 	if (!supabase) {
@@ -321,10 +298,7 @@ export async function updateChatSessionStatus(params: {
 			});
 		}
 
-		return {
-			success: true,
-			message: 'Status chat berhasil diperbarui.'
-		};
+		return ok('Status chat berhasil diperbarui.');
 	}
 
 	const { error } = await supabase
@@ -334,15 +308,7 @@ export async function updateChatSessionStatus(params: {
 		})
 		.eq('id', params.sessionId);
 
-	if (error) {
-		return {
-			success: false,
-			message: error.message
-		};
-	}
+	if (error) return err(error.message);
 
-	return {
-		success: true,
-		message: 'Status chat berhasil diperbarui.'
-	};
+	return ok('Status chat berhasil diperbarui.');
 }

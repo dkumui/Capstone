@@ -1,5 +1,6 @@
 import { MOCK_COMPANY } from '$lib/mock/products';
 import type { ProductTableRow } from '$lib/types/product-table';
+import { capTypeLabel, dbStockStatusLabel, sizeDescription } from '$lib/utils/format';
 import { detectIntent, type ChatIntent } from './intent';
 import {
   CAP_1_COLORS,
@@ -29,13 +30,6 @@ function faqFallback(message: string): string | null {
   const normalized = message.toLowerCase();
   const faq = FAQ_ITEMS.find((item) => item.keywords.some((keyword) => normalized.includes(keyword)));
   return faq?.answer ?? null;
-}
-
-function stockStatusLabel(stockStatus: ProductTableRow['stock_status']): string {
-  if (stockStatus === 'ready') return 'Tersedia';
-  if (stockStatus === 'limited') return 'Terbatas';
-  if (stockStatus === 'sold_out') return 'Habis';
-  return 'Perlu konfirmasi admin';
 }
 
 function findProductByColor(message: string, products: ProductTableRow[]): ProductTableRow | null {
@@ -71,7 +65,7 @@ export function generateRuleBasedReply(input: ChatRequestContext): ChatResponse 
     if (selectedProduct) {
       return {
         intent,
-        answer: `Produk yang sedang Anda lihat adalah ${selectedProduct.name} (${selectedProduct.product_code}), ${selectedProduct.cap_type === 'cap_1_warna' ? 'Cap 1 Warna' : 'Cap 2 Warna'} warna ${selectedProduct.color_variant}. Status stok saat ini ${stockStatusLabel(selectedProduct.stock_status)}.`
+        answer: `Produk yang sedang Anda lihat adalah ${selectedProduct.name} (${selectedProduct.product_code}), ${capTypeLabel(selectedProduct.cap_type)} warna ${selectedProduct.color_variant}. Status stok saat ini ${dbStockStatusLabel(selectedProduct.stock_status)}.`
       };
     }
 
@@ -86,7 +80,7 @@ export function generateRuleBasedReply(input: ChatRequestContext): ChatResponse 
 		if (matchedColorProduct) {
 			return {
 				intent,
-				answer: `Harga ${matchedColorProduct.name} adalah Rp${matchedColorProduct.price.toLocaleString('id-ID')} dengan ukuran ${matchedColorProduct.size_note ?? `kurang lebih ${matchedColorProduct.size_length_cm} x ${matchedColorProduct.size_width_cm} cm`}.`
+				answer: `Harga ${matchedColorProduct.name} adalah Rp${matchedColorProduct.price.toLocaleString('id-ID')} dengan ukuran ${sizeDescription(matchedColorProduct)}.`
 			};
 		}
 
@@ -112,7 +106,7 @@ export function generateRuleBasedReply(input: ChatRequestContext): ChatResponse 
 		if (matchedColorProduct) {
 			return {
 				intent,
-				answer: `Ada ${matchedColorProduct.name}. Jenisnya ${matchedColorProduct.cap_type === 'cap_1_warna' ? 'Cap 1 Warna' : 'Cap 2 Warna'}, ukuran ${matchedColorProduct.size_note ?? `kurang lebih ${matchedColorProduct.size_length_cm} x ${matchedColorProduct.size_width_cm} cm`}, harga Rp${matchedColorProduct.price.toLocaleString('id-ID')}. Untuk stok, saya perlu melihat data stok terbaru.`
+				answer: `Ada ${matchedColorProduct.name}. Jenisnya ${capTypeLabel(matchedColorProduct.cap_type)}, ukuran ${sizeDescription(matchedColorProduct)}, harga Rp${matchedColorProduct.price.toLocaleString('id-ID')}. Untuk stok, saya perlu melihat data stok terbaru.`
 			};
 		}
 
@@ -155,7 +149,7 @@ export function generateRuleBasedReply(input: ChatRequestContext): ChatResponse 
 
 			return {
 				intent,
-				answer: `${matchedColorProduct.name} saat ini ${stockStatusLabel(matchedColorProduct.stock_status)}. Jumlah stok: ${matchedColorProduct.stock_qty ?? 'perlu konfirmasi admin'}.`
+				answer: `${matchedColorProduct.name} saat ini ${dbStockStatusLabel(matchedColorProduct.stock_status)}. Jumlah stok: ${matchedColorProduct.stock_qty ?? 'perlu konfirmasi admin'}.`
 			};
 		}
 
