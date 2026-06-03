@@ -4,109 +4,116 @@
 
 	let { children } = $props();
 
-	const isLoginPage = $derived(page.url.pathname === '/admin/login');
+	const isAdminArea = $derived(String(page.url.pathname).startsWith('/admin'));
 
-	const navItems = [
-		{ href: '/admin', label: 'Overview', desc: 'Ringkasan sistem' },
-		{ href: '/admin/company', label: 'Data Toko', desc: 'Profil dan kontak' },
-		{ href: '/admin/products', label: 'Manajemen Produk', desc: 'CRUD dan stok' },
-		{ href: '/admin/inventory', label: 'Log Stok', desc: 'Audit perubahan' },
-		{ href: '/admin/chats', label: 'Riwayat Chat', desc: 'Pesan pelanggan' }
+	const year = new Date().getFullYear();
+
+	const navLinks = [
+		{ href: '/#katalog', label: 'Katalog' },
+		{ href: '/#layanan', label: 'Layanan' },
+		{ href: '/#kontak', label: 'Kontak' }
 	];
-
-	function isActive(href: string): boolean {
-		const pathname = String(page.url.pathname);
-
-		if (href === '/admin') {
-			return pathname === '/admin';
-		}
-
-		return pathname.startsWith(href);
-	}
 </script>
 
-{#if isLoginPage}
+{#if isAdminArea}
 	{@render children()}
 {:else}
-	<div class="min-h-screen bg-[#fff9ef]">
-		<div class="mx-auto flex w-full max-w-7xl gap-6 px-4 py-6 md:px-6">
-			<aside class="hidden w-72 shrink-0 md:block">
-				<div class="sticky top-6 overflow-hidden rounded-[1.75rem] border border-[#ead8bc] bg-white shadow-sm">
-					<div class="bg-[var(--color-indigo)] p-5 text-white">
-						<p class="text-xs font-black uppercase tracking-[0.22em] text-[#f0c777]">
-							Admin Panel
-						</p>
-
-						<h1 class="mt-2 text-2xl font-black">
+	<div class="flex min-h-screen flex-col">
+		<header class="site-nav">
+			<div class="section-shell flex h-16 items-center justify-between gap-4 md:h-20">
+				<a href="/" class="flex items-center gap-3">
+					<span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-[var(--color-indigo)] text-base font-black text-[var(--color-gold)] shadow-sm">
+						BA
+					</span>
+					<span class="leading-tight">
+						<span class="block text-base font-black tracking-tight text-[var(--color-indigo)] md:text-lg">
 							Batik HM Akmal
-						</h1>
+						</span>
+						<span class="block text-[0.65rem] font-bold uppercase tracking-[0.18em] text-[var(--color-copper)]">
+							Unggul Jaya Banyurip
+						</span>
+					</span>
+				</a>
 
-						<p class="mt-2 text-xs leading-5 text-white/70">
-							Kelola katalog, stok, data toko, dan chat pelanggan.
-						</p>
-					</div>
-
-					<nav class="space-y-1 p-3 text-sm">
-						{#each navItems as item}
-							<a
-								class={isActive(item.href)
-									? 'block rounded-2xl bg-[#fff7e8] px-4 py-3 text-[var(--color-indigo)] ring-1 ring-[#ead8bc]'
-									: 'block rounded-2xl px-4 py-3 text-[#4a3425] transition hover:bg-[#fff7e8]'}
-								href={item.href}
-							>
-								<span class="block font-black">{item.label}</span>
-								<span class="mt-0.5 block text-xs text-[#8a715c]">{item.desc}</span>
-							</a>
-						{/each}
-					</nav>
-
-					<div class="border-t border-[#ead8bc] p-3">
-						<a class="btn-secondary mb-2 w-full" href="/">
-							Lihat Website
+				<nav class="hidden items-center gap-1 md:flex">
+					{#each navLinks as link}
+						<a
+							class="rounded-full px-4 py-2 text-sm font-bold text-[var(--color-brown)] transition hover:bg-[#fff3df] hover:text-[var(--color-indigo)]"
+							href={link.href}
+						>
+							{link.label}
 						</a>
+					{/each}
+				</nav>
 
-						<form method="POST" action="/admin/logout">
-							<button class="btn-primary w-full" type="submit">
-								Logout
-							</button>
-						</form>
-					</div>
+				<div class="flex items-center gap-2">
+					<a class="hidden btn-gold px-4 py-2 text-xs sm:inline-flex" href="/#katalog">
+						Lihat Katalog
+					</a>
+					<a class="btn-secondary px-4 py-2 text-xs" href="/admin">Admin</a>
 				</div>
-			</aside>
+			</div>
 
-			<main class="min-w-0 flex-1">
-				<div class="mb-5 rounded-2xl border border-[#ead8bc] bg-white p-3 shadow-sm md:hidden">
-					<div class="flex items-center justify-between gap-3">
-						<div>
-							<p class="text-xs font-black uppercase tracking-wide text-[#9f7a5a]">
-								Admin Panel
-							</p>
-							<p class="font-black text-[var(--color-indigo)]">Batik HM Akmal</p>
-						</div>
+			<div class="border-t border-[var(--color-line)] bg-white/70 md:hidden">
+				<div class="section-shell flex gap-2 overflow-x-auto py-2.5 text-sm">
+					{#each navLinks as link}
+						<a
+							class="shrink-0 rounded-full bg-[#fff3df] px-4 py-1.5 font-bold text-[var(--color-brown)]"
+							href={link.href}
+						>
+							{link.label}
+						</a>
+					{/each}
+				</div>
+			</div>
+		</header>
 
-						<form method="POST" action="/admin/logout">
-							<button class="btn-secondary px-3 py-2 text-xs" type="submit">
-								Logout
-							</button>
-						</form>
-					</div>
+		<main class="flex-1">
+			{@render children()}
+		</main>
 
-					<div class="mt-3 flex gap-2 overflow-x-auto pb-1 text-sm">
-						{#each navItems as item}
-							<a
-								class={isActive(item.href)
-									? 'shrink-0 rounded-full bg-[var(--color-indigo)] px-4 py-2 font-black text-white'
-									: 'shrink-0 rounded-full bg-[#fff7e8] px-4 py-2 font-semibold text-[#4a3425]'}
-								href={item.href}
-							>
-								{item.label}
-							</a>
-						{/each}
-					</div>
+		<footer class="mt-auto border-t border-[var(--color-line)] bg-[var(--color-indigo)] text-white">
+			<div class="section-shell grid gap-8 py-12 md:grid-cols-[1.4fr_1fr_1fr]">
+				<div>
+					<p class="text-lg font-black">Batik HM Akmal</p>
+					<p class="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-[var(--color-gold)]">
+						Unggul Jaya Banyurip
+					</p>
+					<p class="mt-4 max-w-sm text-sm leading-7 text-white/70">
+						Produsen Batik Cap khas Pekalongan untuk kebutuhan kain, jahit, seragam, dan
+						koleksi harian. Katalog digital, pemesanan via chatbot atau WhatsApp.
+					</p>
 				</div>
 
-				{@render children()}
-			</main>
-		</div>
+				<div>
+					<p class="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-gold)]">
+						Navigasi
+					</p>
+					<ul class="mt-4 space-y-2 text-sm text-white/75">
+						<li><a class="transition hover:text-white" href="/#katalog">Katalog Produk</a></li>
+						<li><a class="transition hover:text-white" href="/#layanan">Layanan</a></li>
+						<li><a class="transition hover:text-white" href="/#kontak">Kontak &amp; Lokasi</a></li>
+						<li><a class="transition hover:text-white" href="/admin">Dashboard Admin</a></li>
+					</ul>
+				</div>
+
+				<div>
+					<p class="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-gold)]">
+						Lokasi
+					</p>
+					<p class="mt-4 text-sm leading-7 text-white/75">
+						Banyurip, Pekalongan Selatan,<br />
+						Kota Pekalongan, Jawa Tengah
+					</p>
+				</div>
+			</div>
+
+			<div class="border-t border-white/10">
+				<div class="section-shell flex flex-col gap-1 py-5 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
+					<p>&copy; {year} Batik HM Akmal. Seluruh hak cipta dilindungi.</p>
+					<p>Katalog Batik Cap Pekalongan</p>
+				</div>
+			</div>
+		</footer>
 	</div>
 {/if}

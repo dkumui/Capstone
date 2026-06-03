@@ -218,3 +218,32 @@ a {
 		font-size: 1rem;
 	}
 }
+
+/* Public site navigation */
+.site-nav {
+	position: sticky;
+	top: 0;
+	z-index: 40;
+	border-bottom: 1px solid var(--color-line);
+	background: rgba(255, 250, 241, 0.85);
+	backdrop-filter: saturate(140%) blur(12px);
+}
+
+/* Offset anchor targets so the sticky nav does not cover headings */
+[id] {
+	scroll-margin-top: 6rem;
+}
+
+/* Small reusable chip/badge */
+.chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	border-radius: 9999px;
+	border: 1px solid var(--color-line);
+	background: #fff7e8;
+	padding: 0.25rem 0.7rem;
+	font-size: 0.7rem;
+	font-weight: 800;
+	color: var(--color-copper);
+}

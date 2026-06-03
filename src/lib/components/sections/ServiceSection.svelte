@@ -4,7 +4,7 @@
 	let { services } = $props<{ services: ServiceData[] }>();
 </script>
 
-<section class="section-shell py-10 md:py-16">
+<section id="layanan" class="section-shell py-10 md:py-16">
 	<div class="surface-card overflow-hidden p-6 md:p-8">
 		<div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
 			<div>

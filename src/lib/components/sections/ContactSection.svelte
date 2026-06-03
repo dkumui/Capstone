@@ -6,7 +6,7 @@
 	const whatsappHref = $derived(`https://wa.me/${company.whatsapp_number}`);
 </script>
 
-<section class="section-shell pb-16 pt-10 md:pb-20 md:pt-16">
+<section id="kontak" class="section-shell pb-16 pt-10 md:pb-20 md:pt-16">
 	<div class="grid gap-6 lg:grid-cols-[1fr_0.9fr]">
 		<div class="relative overflow-hidden rounded-[2rem] bg-[var(--color-indigo)] p-6 text-white card-shadow md:p-8">
 			<div class="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[var(--color-gold)]/20 blur-3xl"></div>
