@@ -16,9 +16,13 @@ export const load = async ({ cookies }) => {
 	let inventoryTransactionCount = 0;
 
 	if (supabase) {
-		const { count } = await supabase
+		const { count, error } = await supabase
 			.from('inventory_transactions')
 			.select('id', { count: 'exact', head: true });
+
+		if (error) {
+			console.error('Failed to fetch inventory transaction count:', error.message);
+		}
 
 		inventoryTransactionCount = count ?? 0;
 	}

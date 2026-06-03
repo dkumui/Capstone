@@ -66,12 +66,16 @@ export async function getPublicProducts(): Promise<ProductTableRow[]> {
   const supabase = createServerSupabaseClient();
   if (!supabase) return getMockProducts();
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('products')
     .select('id, product_code, name, product_type, cap_type, color_variant, size_length_cm, size_width_cm, size_note, price, stock_qty, image_url, description, is_featured, is_active, source, created_at, updated_at')
     .eq('is_active', true)
     .order('created_at', { ascending: false });
 
+  if (error) {
+    console.error('Failed to fetch public products:', error.message);
+    return getMockProducts();
+  }
   if (!data || data.length === 0) return getMockProducts();
   return data.map(mapRowToProduct);
 }
@@ -128,7 +132,12 @@ export async function getAdminProducts(): Promise<ProductTableRow[]> {
 		.select('id, product_code, name, product_type, cap_type, color_variant, size_length_cm, size_width_cm, size_note, price, stock_qty, image_url, description, is_featured, is_active, source, created_at, updated_at')
 		.order('created_at', { ascending: false });
 
-	if (error || !data) {
+	if (error) {
+		console.error('Failed to fetch admin products:', error.message);
+		return getPublicProducts();
+	}
+
+	if (!data) {
 		return getPublicProducts();
 	}
 
@@ -139,7 +148,7 @@ export async function logInventoryTransaction(input: InventoryTransactionInput):
   const supabase = createServerSupabaseClient();
   if (!supabase) return;
 
-  await supabase.from('inventory_transactions').insert({
+  const { error } = await supabase.from('inventory_transactions').insert({
     product_code: input.productCode,
     previous_qty: input.previousQty,
     new_qty: input.newQty,
@@ -147,6 +156,10 @@ export async function logInventoryTransaction(input: InventoryTransactionInput):
     note: input.note ?? null,
     source: 'manual'
   });
+
+  if (error) {
+    console.error(`Failed to log inventory transaction for ${input.productCode}:`, error.message);
+  }
 }
 
 export function getComputedStockStatus(

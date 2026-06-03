@@ -19,11 +19,15 @@ export const load = async ({ cookies }) => {
 	}> = [];
 
 	if (supabase) {
-		const { data } = await supabase
+		const { data, error } = await supabase
 			.from('inventory_transactions')
 			.select('id,product_code,previous_qty,new_qty,previous_stock_status,new_stock_status,source,note,created_at')
 			.order('created_at', { ascending: false })
 			.limit(100);
+
+		if (error) {
+			console.error('Failed to fetch inventory transactions:', error.message);
+		}
 
 		inventoryTransactions = data ?? [];
 	}

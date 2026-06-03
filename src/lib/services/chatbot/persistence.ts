@@ -110,10 +110,14 @@ export async function persistChatSessionAndMessages(params: {
 			onConflict: 'id'
 		});
 
-		if (!upsertSession.error) {
+		if (upsertSession.error) {
+			console.error(`Failed to upsert chat session ${params.sessionId}:`, upsertSession.error.message);
+		} else {
 			const insertMessages = await supabase.from('chat_messages').insert(messages);
 
-			if (!insertMessages.error) {
+			if (insertMessages.error) {
+				console.error(`Failed to insert chat messages for session ${params.sessionId}:`, insertMessages.error.message);
+			} else {
 				return { storage: 'supabase' };
 			}
 		}
@@ -177,7 +181,12 @@ export async function getAdminChatSessions(): Promise<ChatSessionSummary[]> {
 		.order('last_message_at', { ascending: false })
 		.limit(100);
 
-	if (error || !data) {
+	if (error) {
+		console.error('Failed to fetch admin chat sessions:', error.message);
+		return [];
+	}
+
+	if (!data) {
 		return [];
 	}
 
@@ -197,7 +206,7 @@ export async function getAdminChatThread(sessionId: string): Promise<{
 		};
 	}
 
-	const { data: session } = await supabase
+	const { data: session, error: sessionError } = await supabase
 		.from('chat_sessions')
 		.select(
 			'id, visitor_token, customer_name, customer_whatsapp, product_code, product_name, product_color, status, created_at, updated_at, last_message_at'
@@ -205,11 +214,19 @@ export async function getAdminChatThread(sessionId: string): Promise<{
 		.eq('id', sessionId)
 		.maybeSingle();
 
-	const { data: messages } = await supabase
+	if (sessionError) {
+		console.error(`Failed to fetch chat session ${sessionId}:`, sessionError.message);
+	}
+
+	const { data: messages, error: messagesError } = await supabase
 		.from('chat_messages')
 		.select('id, session_id, sender, message, created_at')
 		.eq('session_id', sessionId)
 		.order('created_at', { ascending: true });
+
+	if (messagesError) {
+		console.error(`Failed to fetch chat messages for session ${sessionId}:`, messagesError.message);
+	}
 
 	return {
 		session: (session as ChatSessionSummary | null) ?? null,

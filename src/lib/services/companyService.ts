@@ -7,7 +7,11 @@ export async function getCompanySettings(): Promise<CompanySettings> {
   const supabase = createServerSupabaseClient();
   if (!supabase) return DEFAULT_COMPANY_SETTINGS;
 
-  const { data } = await supabase.from('company_settings').select('*').limit(1).maybeSingle();
+  const { data, error } = await supabase.from('company_settings').select('*').limit(1).maybeSingle();
+  if (error) {
+    console.error('Failed to fetch company settings:', error.message);
+    return DEFAULT_COMPANY_SETTINGS;
+  }
   if (!data) return DEFAULT_COMPANY_SETTINGS;
 
   return {
@@ -27,12 +31,16 @@ export async function getServices(): Promise<ServiceItem[]> {
   const supabase = createServerSupabaseClient();
   if (!supabase) return DEFAULT_SERVICES;
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from('services')
     .select('*')
     .eq('is_active', true)
     .order('display_order', { ascending: true });
 
+  if (error) {
+    console.error('Failed to fetch services:', error.message);
+    return DEFAULT_SERVICES;
+  }
   if (!data || data.length === 0) return DEFAULT_SERVICES;
 
   return data.map((item) => ({
