@@ -31,16 +31,20 @@
 		<div class="mx-auto flex w-full max-w-7xl gap-6 px-4 py-6 md:px-6">
 			<aside class="hidden w-72 shrink-0 md:block">
 				<div class="sticky top-6 overflow-hidden rounded-3xl border border-[#e2d1ba] bg-white shadow-sm">
-					<div class="border-b border-[#eadac7] bg-[#fffaf3] p-5">
-						<p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#9f7a5a]">
-							Admin Panel
-						</p>
+					<div class="bg-[var(--color-indigo)] p-5 text-white">
+						<div class="flex items-center gap-3">
+							<span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-white/10 text-sm font-black text-[var(--color-gold)]">
+								BA
+							</span>
+							<div class="leading-tight">
+								<p class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-[var(--color-gold)]">
+									Admin Panel
+								</p>
+								<h1 class="text-lg font-black tracking-tight">Batik HM Akmal</h1>
+							</div>
+						</div>
 
-						<h1 class="mt-2 text-2xl font-bold text-[var(--color-brown)]">
-							Batik HM Akmal
-						</h1>
-
-						<p class="mt-1 text-xs leading-5 text-[#7a634f]">
+						<p class="mt-3 text-xs leading-5 text-white/70">
 							Kelola katalog Batik Cap, stok, data toko, dan chat pelanggan.
 						</p>
 					</div>
@@ -49,7 +53,7 @@
 						{#each navItems as item}
 							<a
 								class={isActive(item.href)
-									? 'block rounded-2xl bg-[#6a2a2a] px-4 py-3 text-white'
+									? 'block rounded-2xl bg-[var(--color-indigo)] px-4 py-3 text-white shadow-sm'
 									: 'block rounded-2xl px-4 py-3 text-[#4a3425] transition hover:bg-[#f4eadf]'}
 								href={item.href}
 							>
@@ -96,7 +100,7 @@
 						{#each navItems as item}
 							<a
 								class={isActive(item.href)
-									? 'shrink-0 rounded-xl bg-[#6a2a2a] px-3 py-2 font-semibold text-white'
+									? 'shrink-0 rounded-xl bg-[var(--color-indigo)] px-3 py-2 font-semibold text-white'
 									: 'shrink-0 rounded-xl bg-[#f4eadf] px-3 py-2 text-[#4a3425]'}
 								href={item.href}
 							>
