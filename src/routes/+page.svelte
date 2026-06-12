@@ -63,7 +63,7 @@
 
 <HeroSection {company} />
 
-<section class="section-shell py-12 md:py-16">
+<!-- <section class="section-shell py-12 md:py-16">
 	<div class="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
 		<div class="bg-white p-6 md:p-10">
 			<p class="eyebrow">Batik stories</p>
@@ -90,7 +90,7 @@
 			</article>
 		</div>
 	</div>
-</section>
+</section> -->
 
 <section class="section-shell py-12 md:py-16">
 	<div class="bg-white px-6 py-10 md:px-10">

@@ -54,16 +54,16 @@
 			<header class="site-nav">
 				<div class="section-shell flex h-16 items-center justify-between gap-4 md:h-[74px]">
 					<a href="/" class="flex items-center gap-3 lg:hidden">
-						<span class="flex h-8 w-8 items-center justify-center bg-[var(--color-charcoal)] text-[0.7rem] font-black tracking-[0.12em] text-white">
+						<span class="flex h-8 w-8 items-center justify-center bg-[var(--color-soft)] text-[0.7rem] font-black tracking-[0.12em] text-white">
 							HM
 						</span>
 						<span class="text-sm font-black text-[var(--color-ink)]">Batik HM Akmal</span>
 					</a>
 
-					<div class="hidden items-center gap-3 text-[0.75rem] font-semibold text-[var(--color-muted)] lg:flex">
+					<!-- <div class="hidden items-center gap-3 text-[0.75rem] font-semibold text-[var(--color-muted)] lg:flex">
 						<span class="text-sm">⌕</span>
 						<span>Search pattern or style</span>
-					</div>
+					</div> -->
 
 					<nav class="hidden items-center gap-7 md:flex">
 						{#each navLinks as link}
@@ -77,7 +77,7 @@
 						<a class="hidden text-[0.72rem] font-black uppercase tracking-[0.18em] text-[var(--color-accent)] sm:inline-flex" href="/#katalog">
 							Shop in
 						</a>
-						<a class="btn-secondary px-4 py-2 text-[0.68rem]" href="/admin">Admin</a>
+						<!-- <a class="btn-secondary px-4 py-2 text-[0.68rem]" href="/admin">Admin</a> -->
 					</div>
 				</div>
 			</header>
@@ -104,7 +104,7 @@
 							<li><a class="transition hover:text-[var(--color-accent)]" href="/#katalog">Katalog Produk</a></li>
 							<li><a class="transition hover:text-[var(--color-accent)]" href="/#layanan">Layanan</a></li>
 							<li><a class="transition hover:text-[var(--color-accent)]" href="/#kontak">Kontak</a></li>
-							<li><a class="transition hover:text-[var(--color-accent)]" href="/admin">Dashboard Admin</a></li>
+							<!-- <li><a class="transition hover:text-[var(--color-accent)]" href="/admin">Dashboard Admin</a></li> -->
 						</ul>
 					</div>
 
